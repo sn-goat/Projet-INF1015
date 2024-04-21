@@ -54,8 +54,6 @@ namespace chess_game {
             static int counterBlackKings_;
             static int counterWhiteKings_;
 
-            bool firstMove_;
-
             SquareBox* box_;
             QList<SquareBox*> displacements_;
 
