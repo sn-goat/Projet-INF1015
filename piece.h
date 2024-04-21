@@ -15,6 +15,8 @@
 
 namespace chess_game { namespace logics{ class SquareBox;}}
 
+
+
 namespace chess_game {
     namespace logics{
         class Piece: public QGraphicsPixmapItem
@@ -38,12 +40,15 @@ namespace chess_game {
 
             bool getIsInSquareBox();
             void setIsInSquareBox(bool boolean);
-
+            
             void setImage();
 
             static int getCounterWhiteKings();
             static int getCounterBlackKings();
 
+            bool mort = false;
+            //int getPosition() const;
+            //void moveTo(int newPosition);
 
         private:
             Color color_;
@@ -61,5 +66,7 @@ namespace chess_game {
         };
     }
 }
+
+
 
 #endif // PIECE_H
