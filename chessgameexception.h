@@ -14,9 +14,9 @@ public:
     TooManyKingsException() : ChessGameException("Too many kings instantiated!") {}
 };
 
-class PieceNoneExistingException : public ChessGameException {
+class PieceNonexistentException: public ChessGameException {
 public:
-    PieceNoneExistingException() : ChessGameException("The piece(s) that you tried to add is nonexistent!") {}
+    PieceNonexistentException() : ChessGameException("The piece(s) that you tried to add is/are nonexistent!") {}
 };
 
 
