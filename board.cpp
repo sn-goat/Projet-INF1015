@@ -35,16 +35,14 @@ void Board::setBoard(int x, int y, MainGui* mainGui){
 void Board::appendWhitePiecesToQList(){
     Piece* piece;
 
+    piece = new Piece(ColorPiece::WHITE, TypePiece::KING);
+    whitePieces_.append(piece);
+
     piece = new Piece(ColorPiece::WHITE, TypePiece::KNIGHT);
     whitePieces_.append(piece);
 
     piece = new Piece(ColorPiece::WHITE, TypePiece::QUEEN);
     whitePieces_.append(piece);
-
-    piece = new Piece(ColorPiece::WHITE, TypePiece::KING);
-    whitePieces_.append(piece);
-
-
 
 }
 
@@ -97,12 +95,17 @@ void Board::deleteWhiteKings(){
     Piece piece(color, pieceType);
 
     size_t i = 0;
+    int kingsRemoved = 0;
+    int counter = piece.getCounterWhiteKings() - 1;
+
     while(i != (whitePieces_.size() - 1)){
         if(whitePieces_[i]->isKing()){
             whitePieces_.remove(i);
-            if(piece.getCounterWhiteKings() < 2){
+            ++kingsRemoved;
+            if(kingsRemoved == counter){
                 break;
             }
+
         }
         else{
             ++i;
@@ -116,10 +119,14 @@ void Board::deleteBlackKings(){
     Piece piece(color, pieceType);
 
     size_t i = 0;
+    int kingsRemoved = 0;
+    int counter = piece.getCounterBlackKings() - 1;
+
     while(i != (blackPieces_.size() - 1)){
         if(blackPieces_[i]->isKing()){
             blackPieces_.remove(i);
-            if(piece.getCounterBlackKings() < 2){
+            ++kingsRemoved;
+            if(kingsRemoved == counter){
                 break;
             }
         }
@@ -138,7 +145,7 @@ void Board::deleteKings(){
 
 void Board::addingBlackPiece(int index, MainGui* mainGui, SquareBox* squareBox){
     if(index > (blackPieces_.size() - 1)){
-        throw PieceNoneExistingException();
+        throw PieceNonexistentException();
         return;
     }
     squareBox->setPiece(blackPieces_[index]);
@@ -148,7 +155,7 @@ void Board::addingBlackPiece(int index, MainGui* mainGui, SquareBox* squareBox){
 
 void Board::addingWhitePiece(int index, MainGui* mainGui, SquareBox* squareBox){
     if(index > (whitePieces_.size() - 1)){
-        throw PieceNoneExistingException();
+        throw PieceNonexistentException();
         return;
     }
     squareBox->setPiece(whitePieces_[index]);
@@ -173,16 +180,16 @@ void Board::addPieces(MainGui* mainGui){
                     addingBlackPiece(2, mainGui, squareBox);
                 }
                 if(i == 7 && j == 2) {
-                    addingWhitePiece(2, mainGui, squareBox);
-                }
-                if(i == 7 && j == 3) {
-                    addingWhitePiece(1, mainGui, squareBox);
-                }
-                if(i == 7 && j == 4) {
                     addingWhitePiece(0, mainGui, squareBox);
                 }
+                if(i == 7 && j == 3) {
+                    addingWhitePiece(2, mainGui, squareBox);
+                }
+                if(i == 7 && j == 4) {
+                    addingWhitePiece(1, mainGui, squareBox);
+                }
             }
-            catch(PieceNoneExistingException& e){
+            catch(PieceNonexistentException& e){
                 QMessageBox messageBox;
                 messageBox.critical(0, "Error when adding a piece to the chess board", e.what());
             }
