@@ -2,6 +2,7 @@
 #define SQUAREBOX_H
 
 #include "piece.h"
+#include "maingui.h"
 
 #include <QBrush>
 #include <QColor>
@@ -20,6 +21,7 @@ namespace chess_game{
 
             void setColor(QColor color);
             void setBrushColor(QColor color);
+            void setInitialColor();
 
             Piece* getPiece();
             void setPiece(Piece* piece);
@@ -34,6 +36,8 @@ namespace chess_game{
 
             int getColunm();
             void setColumn(int column);
+
+            void mousePressEvent(QGraphicsSceneMouseEvent *event);
 
         private:
             logics::Piece* piece_;
