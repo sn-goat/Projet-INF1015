@@ -32,6 +32,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         maingui.h maingui.cpp
         chessgameexception.h
         raii_initialposition.h raii_initialposition.cpp
+        movementspiece.h movementspiece.cpp
 
     )
 # Define target properties for Android with Qt 6 as:
