@@ -8,9 +8,9 @@ Board::Board() {
     initGame();
 }
 
-void Board::setBoard(int x, int y, MainGui* mainGui){
-    for(int i = 0; i < ROW; ++i){
-        for(int j = 0; j < COL; ++j){
+void Board::addSquareBoxes(int x, int y, MainGui* mainGui){
+    for(int i = 0; i < NLINES; ++i){
+        for(int j = 0; j < NCOLUMNS; ++j){
             SquareBox* squareBox = new SquareBox();
 
             mainGui->allSquareBoxes[i][j] = squareBox;
@@ -32,31 +32,22 @@ void Board::setBoard(int x, int y, MainGui* mainGui){
 }
 
 
-void Board::appendWhitePiecesToQList(){
+void Board::appendToWhitePieces(){
     Piece* piece;
 
+
     piece = new Piece(ColorPiece::WHITE, TypePiece::KING);
-    whitePieces_.append(piece);
+    whitePieces_.push_back(piece);
 
-    piece = new Piece(ColorPiece::WHITE, TypePiece::KNIGHT);
-    whitePieces_.append(piece);
-
-    piece = new Piece(ColorPiece::WHITE, TypePiece::QUEEN);
-    whitePieces_.append(piece);
 
 }
 
-void Board::appendBlackPiecesToQList(){
+void Board::appendToBlackPieces(){
     Piece* piece;
 
-    piece = new Piece(ColorPiece::BLACK, TypePiece::KNIGHT);
-    blackPieces_.append(piece);
-
-    piece = new Piece(ColorPiece::BLACK, TypePiece::QUEEN);
-    blackPieces_.append(piece);
-
     piece = new Piece(ColorPiece::BLACK, TypePiece::KING);
-    blackPieces_.append(piece);
+    blackPieces_.push_back(piece);
+
 
 }
 
@@ -66,6 +57,7 @@ void Board::verificationKingsInstantiation(){
         for(size_t i = 0; i < whitePieces_.size(); ++i){
             if(whitePieces_[i]->isKing()){
                 if(whitePieces_[i]->getCounterWhiteKings() > 1){
+                    deleteWhiteKings();
                     throw TooManyKingsException();
                     break;
                 }
@@ -74,6 +66,7 @@ void Board::verificationKingsInstantiation(){
         for(size_t j = 0; j < blackPieces_.size(); ++j){
             if(blackPieces_[j]->isKing()){
                 if(blackPieces_[j]->getCounterBlackKings() > 1){
+                    deleteBlackKings();
                     throw TooManyKingsException();
                     break;
                 }
@@ -81,9 +74,7 @@ void Board::verificationKingsInstantiation(){
         }
     }
     catch(TooManyKingsException& e){
-        deleteKings();
         QMessageBox messageBox;
-
         messageBox.critical(0, "Error when adding a piece to the piece's QList", e.what());
     }
 
@@ -94,23 +85,22 @@ void Board::deleteWhiteKings(){
     PieceType pieceType;
     Piece piece(color, pieceType);
 
-    size_t i = 0;
     int kingsRemoved = 0;
     int counter = piece.getCounterWhiteKings() - 1;
 
-    while(i != (whitePieces_.size() - 1)){
-        if(whitePieces_[i]->isKing()){
-            whitePieces_.remove(i);
+    for(auto it = whitePieces_.begin(); it != whitePieces_.end();){
+        if((*it)->isKing()){
+            it = whitePieces_.erase(it);
             ++kingsRemoved;
             if(kingsRemoved == counter){
                 break;
             }
-
         }
         else{
-            ++i;
+            ++it;
         }
     }
+
 }
 
 void Board::deleteBlackKings(){
@@ -118,30 +108,23 @@ void Board::deleteBlackKings(){
     PieceType pieceType;
     Piece piece(color, pieceType);
 
-    size_t i = 0;
     int kingsRemoved = 0;
     int counter = piece.getCounterBlackKings() - 1;
 
-    while(i != (blackPieces_.size() - 1)){
-        if(blackPieces_[i]->isKing()){
-            blackPieces_.remove(i);
+    for(auto it = blackPieces_.begin(); it != blackPieces_.end();){
+        if((*it)->isKing()){
+            it = blackPieces_.erase(it);
             ++kingsRemoved;
             if(kingsRemoved == counter){
                 break;
             }
         }
         else{
-            ++i;
+            ++it;
         }
-
-
     }
 }
 
-void Board::deleteKings(){
-    deleteBlackKings();
-    deleteWhiteKings();
-}
 
 void Board::addingBlackPiece(int index, MainGui* mainGui, SquareBox* squareBox){
     if(index > (blackPieces_.size() - 1)){
@@ -172,8 +155,8 @@ void Board::restartGame(){
 }
 
 void Board::initGame(){
-    appendWhitePiecesToQList();
-    appendBlackPiecesToQList();
+    appendToWhitePieces();
+    appendToBlackPieces();
     verificationKingsInstantiation();
 }
 
