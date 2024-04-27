@@ -2,15 +2,20 @@
 
 using namespace chess_game;
 using namespace logics;
+using namespace graphics;
+
+
+extern MainGui* mainGui;
 
 int Piece::counterBlackKings_ = 0;
 int Piece::counterWhiteKings_ = 0;
 
-Piece::Piece(Color colorPiece, PieceType typePiece, QGraphicsItem *graphicsItem): QGraphicsPixmapItem(graphicsItem) {
+Piece::Piece(Color colorPiece, PieceType typePiece, QGraphicsItem *graphicsItem): QGraphicsPixmapItem(graphicsItem), movements(std::make_unique<MovementsPiece>(this)){
     color_ = colorPiece;
     pieceType_ = typePiece;
     isInSquareBox_ = true;
     setImage();
+    InitialMove = true;
 
     if(isKing()){
         if(isWhite()){
@@ -57,8 +62,9 @@ SquareBox* Piece::getSquareBox(){
     return box_;
 }
 
+
 void Piece::setBox(SquareBox* box){
-    box_ = box;
+    box = box;
 }
 
 bool Piece::isWhite(){
@@ -115,6 +121,49 @@ void Piece::setImage(){
         case ColorPiece::NONE:
             break;
     }
+}
+
+void Piece::setInitialColorDisplacements(){
+    for(int i = 0; i < displacements.size(); ++i){
+        displacements[i]->setInitialColor();
+    }
+}
+
+void Piece::mousePressEvent(QGraphicsSceneMouseEvent* event){
+    if(this == mainGui->activePiece){
+        mainGui->activePiece->getSquareBox()->setInitialColor();
+        mainGui->activePiece->setInitialColorDisplacements();
+        mainGui->activePiece = nullptr;
+        return;
+    }
+    if((!getIsInSquareBox() )|| ( (mainGui->getTurn() != this->getColor().getColor())&& (!mainGui->activePiece)) ){
+        return;
+    }
+    if(!mainGui->activePiece){
+        mainGui->activePiece = this;
+        mainGui->activePiece->getSquareBox()->setColor(Qt::red);
+        mainGui->activePiece->movements->moves(mainGui);
+    }
+    else if(this->getColor().getColor() != mainGui->activePiece->getColor().getColor()){
+        this->getSquareBox()->mousePressEvent(event);
+    }
+
+
+
+}
+
+bool Piece::boxConfiguration(SquareBox* box){
+    if(box->isOccupied()) {
+        if(displacements[0]->getPiece()->isKing()){
+            box->setColor(Qt::blue);
+        }
+        else
+            box->setBrushColor(Qt::red);
+        return true;
+    }
+    else
+        displacements[0]->setBrushColor(Qt::darkRed);
+    return false;
 }
 
 
