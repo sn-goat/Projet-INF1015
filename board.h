@@ -7,12 +7,15 @@
 #include "chessgameexception.h"
 #include "maingui.h"
 
+#include <vector>
+
 #include <QGraphicsRectItem>
 #include <QList>
 
 namespace chess_game { namespace graphics {class MainGui;}}
 namespace chess_game { namespace logics {class InitialPosition;}}
-
+namespace chess_game { namespace logics{ class SquareBox;}}
+namespace chess_game{ namespace logics{ class Piece;}}
 
 namespace chess_game{
     namespace graphics{
@@ -23,30 +26,29 @@ namespace chess_game{
         public:
             Board();
 
-            void setBoard(int x, int y, MainGui* mainGui);
+            void addSquareBoxes(int x, int y, MainGui* mainGui);
             void addPieces(MainGui* mainGui);
 
             void initGame();
             void restartGame();
-            void appendWhitePiecesToQList();
-            void appendBlackPiecesToQList();
+            void appendToWhitePieces();
+            void appendToBlackPieces();
 
             void verificationKingsInstantiation();
-            void addingBlackPiece(int index,MainGui* gui, logics::SquareBox* squareBox);
-            void addingWhitePiece(int index,  MainGui* gui, logics::SquareBox* squareBox);
+            void addingBlackPiece(int index,MainGui* MainGui, logics::SquareBox* squareBox);
+            void addingWhitePiece(int index,  MainGui* MainGui, logics::SquareBox* squareBox);
 
 
-            const int ROW = 8;
-            const int COL = 8;
+            const int NLINES = 8;
+            const int NCOLUMNS = 8;
             const int SQUARE_BOX_SIZE = 100;
 
         private:
-            void deleteKings();
             void deleteBlackKings();
             void deleteWhiteKings();
 
-            QList <logics::Piece*> whitePieces_;
-            QList <logics::Piece*> blackPieces_;
+            std::vector<logics::Piece*> whitePieces_;
+            std::vector<logics::Piece*> blackPieces_;
 
             logics::InitialPosition* initialPosition_ = nullptr;
 
