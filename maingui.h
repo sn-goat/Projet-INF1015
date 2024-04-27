@@ -5,11 +5,14 @@
 #include "squarebox.h"
 #include "board.h"
 
+#include <vector>
+
 #include <QGraphicsView>
 #include <QGraphicsScene>
-#include <QList>
 
 namespace chess_game{ namespace graphics {class Board;}}
+namespace chess_game { namespace logics{ class SquareBox;}}
+namespace chess_game{ namespace logics{ class Piece;}}
 
 namespace chess_game{
     namespace graphics {
@@ -25,6 +28,13 @@ namespace chess_game{
             void removeElementScene(QGraphicsItem *graphicsItem);
 
             logics::SquareBox* allSquareBoxes[8][8];
+            std::vector<logics::Piece*> activePieces;
+
+            logics::Piece* activePiece;
+
+            ColorPiece  getTurn() ;
+            void setTurn(ColorPiece turn);
+            void changeTurn();
 
             void restartGame();
         public slots:
@@ -34,7 +44,9 @@ namespace chess_game{
         private:
             QGraphicsScene* scene_;
             Board* chessBoard_;
-            QList <QGraphicsItem*> graphicsItems_;
+            std::vector<QGraphicsItem*> graphicsItems_;
+            ColorPiece turn_;
+            QGraphicsTextItem * turnDisplay_;
         };
 
     }
