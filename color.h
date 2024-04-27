@@ -17,8 +17,6 @@ namespace chess_game {
         Color(ColorPiece color);
         Color();
 
-        char* toString();
-
         ColorPiece getColor();
 
 
