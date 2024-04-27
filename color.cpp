@@ -12,12 +12,3 @@ ColorPiece Color::getColor(){
     return colorPiece_;
 }
 
-char* Color::toString(){
-    switch (colorPiece_) {
-        case ColorPiece::BLACK: return "BLACK";
-        case ColorPiece::WHITE: return "WHITE";
-        case ColorPiece::NONE: return "NONE";
-            \
-    }
-
-}
