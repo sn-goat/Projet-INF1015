@@ -5,15 +5,19 @@
 #include "color.h"
 #include "piecetype.h"
 #include "squarebox.h"
+#include "movementspiece.h"
+#include "maingui.h"
 
+#include <vector>
+#include <memory>
 
 #include <QGraphicsSceneMouseEvent>
 #include <QGraphicsPixmapItem>
 #include <QColor>
-#include <QList>
-#include <QString>
 
 namespace chess_game { namespace logics{ class SquareBox;}}
+namespace chess_game{ namespace logics{ class MovementsPiece;}}
+
 
 namespace chess_game {
     namespace logics{
@@ -29,6 +33,7 @@ namespace chess_game {
 
             SquareBox* getSquareBox();
             void setBox(SquareBox* box);
+            bool boxConfiguration(SquareBox* box);
             void setImage();
 
             bool isKing();
@@ -37,10 +42,19 @@ namespace chess_game {
             bool getIsInSquareBox();
             void setIsInSquareBox(bool boolean);
 
+            void setInitialColorDisplacements();
+
 
             static int getCounterWhiteKings();
             static int getCounterBlackKings();
 
+            void mousePressEvent(QGraphicsSceneMouseEvent* event);
+
+
+            bool InitialMove;
+            std::unique_ptr<MovementsPiece> movements;
+
+            std::vector<SquareBox*> displacements;
 
         private:
             Color color_;
@@ -52,7 +66,7 @@ namespace chess_game {
             static int counterWhiteKings_;
 
             SquareBox* box_;
-            QList<SquareBox*> displacements_;
+
 
 
         };
