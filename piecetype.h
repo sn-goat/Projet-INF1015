@@ -19,8 +19,6 @@ namespace chess_game {
 
         TypePiece getType();
 
-        char* toString();
-
     private:
         TypePiece typePiece_;
     };
